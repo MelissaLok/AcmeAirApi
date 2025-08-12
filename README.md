@@ -161,9 +161,73 @@ src/
 
 ---
 
-## 🧾 Notes and Assumptions
+## 🤕 Trade Offs and Assumptions
 
-- Data is stored in memory and resets on restart.
-- All timestamps are in local server time.
-- No authentication is required (for testing purposes).
-- Booking IDs are UUIDs generated on creation.
+1. *Simplicity vs Flexibility*
+- A simple `PUT` is easy to use, but it may not support partial updates when using `PATCH`
+
+2. *Schema evolution vs Backward Compatibility*
+- Changing passenger update later may cause older clients to break, will require versioning.
+
+3. *External DB vs In-memory storage*
+- No (external) database means a restart resets everything 
+
+4. *CRU(D)*
+- Cancellation is a soft status change, not a deletion.
+- We don't actually want to delete the resource, and POST gives me the flexibility for real-world cancellation logic
+- in most systems, cancelled bookings are retained for audit, reporting and/or reactivation.
+- Allows extending the logic, for example: 
+  - refund
+  - inventory updates
+  - email notifications
+- however! POST is not idempotent unlike DELETE 
+
+5. *Validation is handled via annotations (i.e @NotBlank, @Email)*
+- Not done with manual checks; which means this is a "valid" email: abc@IkP.com
+- Can consider regex to handle emails
+- `@Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}",
+  flags = Pattern.Flag.CASE_INSENSITIVE)`
+
+6. *Generic Error Handling*
+- Can be extended via @ControllerAdvice
+
+7. Booking ID format is UUID based and created on POST.
+
+8. Time is done in local server time, using LocalDateTime; so there is no timezone normalization.
+
+9. Passenger info is embedded directly in the booking payload, not stored separately.
+
+10. Concurrency is not handled
+    - if two users try to update the same passenger at the same time, we will get race conditions. 
+    - Will require optimistic locking or versioning to prevent this from happening.
+
+---
+
+## 🚫 Features Left Out (deliberately)
+
+1. Pricing and Payment Flow
+- fare calculations, taxes, discounts, refunds etc require integration with pricing engines and payment gateways
+- without this we have no dynamic pricing, no refund logic, and no payment processing
+
+2. Seat Map / Inventory Management 
+- this requires managing seat counts, capacity, and overbooking (which adds significant complexity)
+- will cause overbooking/double booking
+
+3. PATCH Partial Updating
+- requires more sophisticated validation and merging logic
+- without this, we risk accidental data loss if fields are omitted
+
+4. Security
+- even though essential, this is an infrastructure concern
+- can cause data leaks and unauthorized access 
+
+5. Search by Passenger
+- this requires indexing and also normalization of passenger data 
+
+6. Only Relying on @Valid annotations
+- input sanitization is not implemented 
+- api is prone to XSS and/or SQL injections
+
+7. Pagination
+- much like pricing and inventory management, adds too much complexity especially during testing and mocking
+- data size is inversely proportional to performance to scalability (data up, performance & scalability down)
