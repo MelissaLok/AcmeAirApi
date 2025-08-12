@@ -29,7 +29,7 @@ public class FlightController {
      *
      * @param origin       IATA code of the departure airport (e.g. "WLG").
      * @param destination  IATA code of the destination airport (e.g. "AKL").
-     * @return 200 OK response containing a list of matching flights.
+     * @return 200 OK response containing a list of matching flights, otherwise 404 Not Found
      */
     @GetMapping("/search")
     public ResponseEntity<List<Flight>> searchFlights(
@@ -37,6 +37,9 @@ public class FlightController {
             @RequestParam @NotBlank String destination
     ) {
         var results = service.searchFlights(origin, destination);
+        if (results.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(results);
     }
 

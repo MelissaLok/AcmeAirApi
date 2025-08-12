@@ -41,9 +41,9 @@ public class FlightRepository {
     List<Flight> defaultSeed() {
         LocalDateTime base = LocalDateTime.of(2025, 8, 11, 9, 0);
         return List.of(
-                new Flight("FL001", "Wellington", "Auckland",     base.plusHours(2), base.plusHours(3)),
-                new Flight("FL002", "Wellington", "Christchurch", base.plusHours(4), base.plusHours(5)),
-                new Flight("FL003", "Auckland",   "Wellington",   base.plusHours(6), base.plusHours(7))
+                new Flight("FL001", "WLG", "AKL",     base.plusHours(2), base.plusHours(3)),
+                new Flight("FL002", "WLG", "CHC", base.plusHours(4), base.plusHours(5)),
+                new Flight("FL003", "AKL",   "WLG",   base.plusHours(6), base.plusHours(7))
         );
     }
 

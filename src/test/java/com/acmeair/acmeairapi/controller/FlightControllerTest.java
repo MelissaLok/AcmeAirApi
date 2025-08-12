@@ -32,7 +32,7 @@ class FlightControllerTest {
     @DisplayName("Search flights: success returns matching flights with 200")
     void searchFlights_success() {
         ResponseEntity<String> response = rest.getForEntity(
-                baseUrl() + "/search?origin=Wellington&destination=Auckland",
+                baseUrl() + "/search?origin=WLG&destination=AKL",
                 String.class
         );
 
@@ -45,7 +45,7 @@ class FlightControllerTest {
     @DisplayName("Search flights: missing origin -> 400 Bad Request")
     void searchFlights_missingParam_failure() {
         ResponseEntity<String> response = rest.getForEntity(
-                baseUrl() + "/search?destination=Auckland",
+                baseUrl() + "/search?destination=AKL",
                 String.class
         );
 
@@ -63,8 +63,8 @@ class FlightControllerTest {
         );
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).contains("\"origin\":\"Wellington\"");
-        assertThat(response.getBody()).contains("\"destination\":\"Auckland\"");
+        assertThat(response.getBody()).contains("\"origin\":\"WLG\"");
+        assertThat(response.getBody()).contains("\"destination\":\"AKL\"");
     }
 
     @Test
