@@ -51,6 +51,11 @@ curl "http://localhost:8080/api/flights/search?origin=WLG&destination=AKL"
 ```bash 
 curl "http://localhost:8080/api/flights/FL001"
 ```
+
+- Get All Available Flights (GET)
+```bash 
+curl "http://localhost:8080/api/flights"
+```
 <br>
 
 3. **👨🏻‍💻 Booking Endpoints** 
