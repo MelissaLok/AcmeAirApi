@@ -32,7 +32,9 @@ cd AcmeAirApi
 ./gradlew bootRun
 ```
 Once it runs, it'll listen on `http://localhost:8080`
-
+If you get a permission denied error when running `./gradlew bootRun`,
+then please run chmod +x gradlew
+(Likely to hit if you are running from a virtual environment).
 
 > Open Swagger has been enabled for ease of testing, 
 but here are the steps on using the API via bash:
