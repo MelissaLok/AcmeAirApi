@@ -117,7 +117,10 @@ curl -X PUT "http://localhost:8080/api/bookings/$BOOKING_ID/passenger" \
 
 - Cancel Booking
 ```bash
-curl "http://localhost:8080/$BOOKING_ID/cancel"
+curl -X POST \
+  'http://localhost:8080/api/bookings/$BOOKING_ID/cancel' \
+  -H 'accept: */*' \
+  -d ''
 ```
 Expected: `200 OK` and booking status changes from `CONFIRMED` to `CANCELLED`
 
