@@ -56,4 +56,10 @@ public class FlightController {
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @GetMapping
+    public List<Flight> getAllFlights() {
+        return service.getAllFlights();
+    }
 }
+

@@ -23,4 +23,8 @@ public class FlightService {
     public Optional<Flight> getFlightById(String id) {
         return storage.findById(id);
     }
+
+    public List<Flight> getAllFlights() {
+        return storage.findAll();
+    }
 }

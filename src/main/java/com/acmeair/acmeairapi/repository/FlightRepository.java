@@ -71,4 +71,8 @@ public class FlightRepository {
     public Optional<Flight> findById(String id) {
         return Optional.ofNullable(flights.get(id));
     }
+
+    public List<Flight> findAll() {
+        return new ArrayList<>(flights.values());
+    }
 }
